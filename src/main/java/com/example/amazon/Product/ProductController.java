@@ -4,6 +4,7 @@ import com.example.amazon.Product.CommandHandlers.DeleteProductCommandHandler;
 import com.example.amazon.Product.QueryHandlers.GetProductByIdQueryHandler;
 import com.example.amazon.Product.QueryHandlers.GetProductsQueryHandler;
 import lombok.Getter;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class ProductController {
     }
 
     @GetMapping()
+    @Cacheable("products")
     public ResponseEntity<List<ProductDTO>> getProducts(
             @RequestHeader(value = "region", defaultValue = "US") String region,
             @RequestParam(required = false) String category,
