@@ -3,6 +3,7 @@ package com.example.amazon.Product;
 import com.example.amazon.Category.Category;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -13,6 +14,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -35,4 +37,13 @@ public class Product {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    public Product(ProductRequest request) {
+        this.name = request.getName();
+        this.description = request.getDescription();
+        this.manufacturer = request.getManufacturer();
+        this.price = request.getPrice();
+        this.category = new Category(request.getCategory());
+        this.region = Region.valueOf(request.getRegion());
+    }
 }

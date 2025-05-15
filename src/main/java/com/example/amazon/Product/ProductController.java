@@ -1,5 +1,6 @@
 package com.example.amazon.Product;
 
+import com.example.amazon.Product.CommandHandlers.CreateProductCommandHandler;
 import com.example.amazon.Product.CommandHandlers.DeleteProductCommandHandler;
 import com.example.amazon.Product.QueryHandlers.GetProductByIdQueryHandler;
 import com.example.amazon.Product.QueryHandlers.GetProductsQueryHandler;
@@ -17,15 +18,18 @@ public class ProductController {
     private final GetProductsQueryHandler getProductsQueryHandler;
     private final GetProductByIdQueryHandler getProductByIdQueryHandler;
     private final DeleteProductCommandHandler deleteProductCommandHandler;
+    private final CreateProductCommandHandler createProductCommandHandler;
 
     public ProductController(
             GetProductsQueryHandler getProductsQueryHandler,
             GetProductByIdQueryHandler getProductByIdQueryHandler,
-            DeleteProductCommandHandler deleteProductCommandHandler
+            DeleteProductCommandHandler deleteProductCommandHandler,
+            CreateProductCommandHandler createProductCommandHandler
     ) {
         this.getProductsQueryHandler = getProductsQueryHandler;
         this.getProductByIdQueryHandler = getProductByIdQueryHandler;
         this.deleteProductCommandHandler = deleteProductCommandHandler;
+        this.createProductCommandHandler = createProductCommandHandler;
     }
 
     @GetMapping()
@@ -47,6 +51,11 @@ public class ProductController {
     @GetMapping("/{uuid}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID uuid) {
         return getProductByIdQueryHandler.execute(uuid);
+    }
+
+    @PostMapping()
+    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest request) {
+        return createProductCommandHandler.execute(request);
     }
 
     @DeleteMapping("/{uuid}")
