@@ -5,11 +5,13 @@ import com.example.amazon.Exceptions.ErrorMessage;
 import com.example.amazon.Exceptions.InvalidProductException;
 import com.example.amazon.Exceptions.SimpleResponse;
 import io.micrometer.common.util.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class ProductValidator {
-    public static Product execute(ProductRequest request, List<Category> availableCategories) {
+    public Product execute(ProductRequest request, List<Category> availableCategories) {
         if (nameIsEmpty(request.getName())) {
             throw new InvalidProductException(new SimpleResponse(ErrorMessage.PRODUCT_NAME_CANNOT_BE_EMPTY.getMessage()), request);
         }

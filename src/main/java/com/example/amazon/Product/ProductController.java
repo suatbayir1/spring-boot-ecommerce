@@ -2,6 +2,8 @@ package com.example.amazon.Product;
 
 import com.example.amazon.Product.CommandHandlers.CreateProductCommandHandler;
 import com.example.amazon.Product.CommandHandlers.DeleteProductCommandHandler;
+import com.example.amazon.Product.CommandHandlers.UpdateProductCommand;
+import com.example.amazon.Product.CommandHandlers.UpdateProductCommandHandler;
 import com.example.amazon.Product.QueryHandlers.GetProductByIdQueryHandler;
 import com.example.amazon.Product.QueryHandlers.GetProductsQueryHandler;
 import lombok.Getter;
@@ -19,17 +21,20 @@ public class ProductController {
     private final GetProductByIdQueryHandler getProductByIdQueryHandler;
     private final DeleteProductCommandHandler deleteProductCommandHandler;
     private final CreateProductCommandHandler createProductCommandHandler;
+    private final UpdateProductCommandHandler updateProductCommandHandler;
 
     public ProductController(
             GetProductsQueryHandler getProductsQueryHandler,
             GetProductByIdQueryHandler getProductByIdQueryHandler,
             DeleteProductCommandHandler deleteProductCommandHandler,
-            CreateProductCommandHandler createProductCommandHandler
+            CreateProductCommandHandler createProductCommandHandler,
+            UpdateProductCommandHandler updateProductCommandHandler
     ) {
         this.getProductsQueryHandler = getProductsQueryHandler;
         this.getProductByIdQueryHandler = getProductByIdQueryHandler;
         this.deleteProductCommandHandler = deleteProductCommandHandler;
         this.createProductCommandHandler = createProductCommandHandler;
+        this.updateProductCommandHandler = updateProductCommandHandler;
     }
 
     @GetMapping()
@@ -56,6 +61,11 @@ public class ProductController {
     @PostMapping()
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductRequest request) {
         return createProductCommandHandler.execute(request);
+    }
+
+    @PutMapping("/{uuid}")
+    public ResponseEntity<ProductDTO> updateProduct(@PathVariable UUID uuid, @RequestBody ProductRequest request) {
+        return updateProductCommandHandler.execute(new UpdateProductCommand(uuid, request));
     }
 
     @DeleteMapping("/{uuid}")

@@ -14,20 +14,23 @@ public class CreateProductCommandHandler implements Command<ProductRequest, Prod
     private final Logger logger = LoggerFactory.getLogger(CreateProductCommandHandler.class);
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductValidator productValidator;
 
     public CreateProductCommandHandler(
             ProductRepository productRepository,
-            CategoryRepository categoryRepository
+            CategoryRepository categoryRepository,
+            ProductValidator productValidator
     ) {
         this.productRepository = productRepository;
         this.categoryRepository = categoryRepository;
+        this.productValidator = productValidator;
     }
 
     @Override
     public ResponseEntity<ProductDTO> execute(ProductRequest request) {
         logger.info("Create product command handler " + request);
 
-        Product product = ProductValidator.execute(request, categoryRepository.findAll());
+        Product product = productValidator.execute(request, categoryRepository.findAll());
         productRepository.save(product);
 
         return ResponseEntity.ok(new ProductDTO(product));
